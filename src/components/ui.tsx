@@ -28,11 +28,14 @@ export function Button({ title, variant = 'primary', style, disabled, ...rest }:
   );
 }
 
-export function Stat({ label, value }: { label: string; value: string }) {
+export function Stat({ label, value, unit }: { label: string; value: string; unit?: string }) {
   const t = useTheme();
   return (
     <View style={styles.stat}>
-      <Text style={[styles.statValue, { color: t.text }]}>{value}</Text>
+      <Text style={[styles.statValue, { color: t.text }]} numberOfLines={1}>
+        {value}
+        {unit ? <Text style={[styles.statUnit, { color: t.muted }]}> {unit}</Text> : null}
+      </Text>
       <Text style={[styles.statLabel, { color: t.muted }]}>{label}</Text>
     </View>
   );
@@ -61,5 +64,6 @@ const styles = StyleSheet.create({
   buttonText: { fontSize: 17, fontWeight: '700' },
   stat: { flex: 1, alignItems: 'center' },
   statValue: { fontSize: 24, fontWeight: '700', fontVariant: ['tabular-nums'] },
+  statUnit: { fontSize: 14, fontWeight: '600' },
   statLabel: { fontSize: 13, marginTop: 2 },
 });

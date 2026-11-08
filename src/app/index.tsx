@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { Button, Stars, Stat } from '../components/ui';
-import { formatDateTime, formatDistance, formatDuration } from '../lib/format';
+import { distanceParts, formatDateTime, formatDistance, formatDuration } from '../lib/format';
 import { getActiveWalk, listWalks } from '../lib/storage';
 import { useTheme } from '../lib/theme';
 import type { Walk } from '../lib/types';
@@ -44,7 +44,7 @@ export default function Home() {
         <Text style={[styles.cardTitle, { color: t.muted }]}>Last 7 days</Text>
         <View style={styles.row}>
           <Stat label="walks" value={String(thisWeek.length)} />
-          <Stat label="distance" value={formatDistance(weekKm)} />
+          <Stat label="distance" {...distanceParts(weekKm)} />
           <Stat label="poops" value={String(weekPoops)} />
         </View>
       </View>

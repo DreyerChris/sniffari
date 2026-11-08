@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import WalkMap from '../../components/WalkMap';
 import { Button, Stars, Stat } from '../../components/ui';
-import { formatDateTime, formatDistance, formatDuration, formatSteps, RATING_LABELS } from '../../lib/format';
+import { distanceParts, formatDateTime, formatDuration, formatSteps, RATING_LABELS } from '../../lib/format';
+import { confirm } from '../../lib/confirm';
 import { deleteWalk, getWalk } from '../../lib/storage';
 import { useTheme } from '../../lib/theme';
 import type { Walk } from '../../lib/types';
@@ -29,17 +30,10 @@ export default function WalkDetail() {
   const duration = (walk.endedAt ?? walk.startedAt) - walk.startedAt;
 
   const onDelete = () => {
-    Alert.alert('Delete this walk?', 'This cannot be undone.', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: async () => {
-          await deleteWalk(walk.id);
-          router.back();
-        },
-      },
-    ]);
+    confirm('Delete this walk?', 'This cannot be undone.', 'Delete', async () => {
+      await deleteWalk(walk.id);
+      router.back();
+    });
   };
 
   return (
@@ -58,7 +52,7 @@ export default function WalkDetail() {
       <View style={[styles.card, { backgroundColor: t.card, borderColor: t.border }]}>
         <View style={styles.row}>
           <Stat label="time" value={formatDuration(duration)} />
-          <Stat label="distance" value={formatDistance(walk.distanceKm)} />
+          <Stat label="distance" {...distanceParts(walk.distanceKm)} />
         </View>
         <View style={styles.row}>
           <Stat label="steps" value={formatSteps(walk.steps)} />
@@ -82,6 +76,6 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   map: { height: 320, borderRadius: 16, overflow: 'hidden', borderWidth: 1 },
   card: { borderRadius: 16, borderWidth: 1, padding: 16, gap: 14, alignItems: 'center' },
-  row: { flexDirection: 'row' },
+  row: { flexDirection: 'row', alignSelf: 'stretch' },
   note: { fontSize: 16, textAlign: 'center' },
 });

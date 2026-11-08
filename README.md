@@ -44,4 +44,4 @@ Code layout:
 
 - **Keep the app open during the walk.** Tracking pauses when the app is in the background or the phone is locked (the screen is kept awake to help). Background tracking needs a custom development build rather than Expo Go, and is the obvious next step.
 - **Android map key.** Maps work in Expo Go. A standalone Android build needs a Google Maps API key in `app.json` (`android.config.googleMaps.apiKey`).
-- No web version, because the map library is mobile only.
+- The web version (`npm run web`) is for previews only. It draws the route on a plain grid instead of a real map, and has no step counter.

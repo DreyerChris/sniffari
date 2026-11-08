@@ -1,5 +1,10 @@
 export function formatDistance(km: number): string {
-  return km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(2)} km`;
+  const { value, unit } = distanceParts(km);
+  return `${value} ${unit}`;
+}
+
+export function distanceParts(km: number): { value: string; unit: string } {
+  return km < 1 ? { value: String(Math.round(km * 1000)), unit: 'm' } : { value: km.toFixed(2), unit: 'km' };
 }
 
 export function formatDuration(ms: number): string {

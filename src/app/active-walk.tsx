@@ -7,7 +7,8 @@ import RatingForm from '../components/RatingForm';
 import WalkMap from '../components/WalkMap';
 import { Button, Stat } from '../components/ui';
 import { useWalkTracker } from '../hooks/useWalkTracker';
-import { formatDistance, formatDuration, formatSteps } from '../lib/format';
+import { distanceParts, formatDuration, formatSteps } from '../lib/format';
+import { confirm } from '../lib/confirm';
 import { saveWalk } from '../lib/storage';
 import { useTheme } from '../lib/theme';
 import type { Rating } from '../lib/types';
@@ -75,24 +76,14 @@ export default function ActiveWalk() {
   };
 
   const onEnd = () => {
-    Alert.alert('End walk?', undefined, [
-      { text: 'Keep walking', style: 'cancel' },
-      { text: 'End walk', style: 'destructive', onPress: () => void tracker.finish() },
-    ]);
+    confirm('End walk?', undefined, 'End walk', () => void tracker.finish(), 'Keep walking');
   };
 
   const onDiscard = () => {
-    Alert.alert('Discard this walk?', "It won't be saved to your history.", [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Discard',
-        style: 'destructive',
-        onPress: async () => {
-          await tracker.clear();
-          router.back();
-        },
-      },
-    ]);
+    confirm('Discard this walk?', "It won't be saved to your history.", 'Discard', async () => {
+      await tracker.clear();
+      router.back();
+    });
   };
 
   const onRate = async (rating: Rating, note: string) => {
@@ -122,7 +113,7 @@ export default function ActiveWalk() {
       >
         <View style={styles.row}>
           <Stat label="time" value={formatDuration(elapsed)} />
-          <Stat label="distance" value={formatDistance(walk.distanceKm)} />
+          <Stat label="distance" {...distanceParts(walk.distanceKm)} />
           <Stat label="steps" value={tracker.stepsAvailable || walk.steps ? formatSteps(walk.steps) : '–'} />
           <Stat label="poops" value={String(walk.poops.length)} />
         </View>
