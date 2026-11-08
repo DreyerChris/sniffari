@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "Sniffari",
+    "slug": "sniffari",
+    "scheme": "sniffari",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dreyerchris.sniffari",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Sniffari uses your location to draw the route of your dog walk and mark poop spots.",
+        "NSMotionUsageDescription": "Sniffari counts your steps during a dog walk."
+      }
+    },
+    "android": {
+      "package": "com.dreyerchris.sniffari",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACTIVITY_RECOGNITION"
+      ],
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Sniffari uses your location to draw the route of your dog walk and mark poop spots."
+        }
+      ],
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "Sniffari counts your steps during a dog walk."
+        }
+      ]
+    ]
+  }
+}
